@@ -1,11 +1,14 @@
-import React from 'react'
+import React from 'react';
 import PropTypes from 'prop-types'
 
 import "./styles/Track.css";
 
 // Here we use destructuring to extract the props into separate variables
 // See https://wesbos.com/destructuring-objects/
-const Track = ({title, artist, playtime, albumart, favorite}) => {
+
+const Track = ({title, artist, playtime, albumart, favorite, moveToTopCallback, index, side}) => {
+
+  const TopTrackClick = () => moveToTopCallback(index, side);
   return (
     <li className="track">
       <img className="track--albumart" alt={`album art for ${title}`} src={albumart} />
@@ -13,14 +16,14 @@ const Track = ({title, artist, playtime, albumart, favorite}) => {
       <input
         type="checkbox"
         className="track--favorite"
-        checked={!favorite}
+        defaultChecked={!favorite}
       />
       <p className="track--artist">{artist}</p>
       <p className="track--playtime">{playtime}</p>
       <button
         className="track--control track--to-top"
         >
-        <span role="img" aria-label="send to top">🔝</span>
+        <span role="img" aria-label="send to top" onClick={TopTrackClick}>🔝</span>
       </button>
       <button
         className="track--control track--switch"
