@@ -20,15 +20,27 @@ class App extends Component {
   }
 
   onChangeTrack = (track,side) => {
-    let updateSongList = [...this.state.songData];
+    let updateSongList = this.state.songData;
+    let newTopTrack = " ";
+    let i = " ";
 
     if (side === "Morning"){
-      let newTopTrack = updateSongList.splice(track, 1)
-      updateSongList.unshift(newTopTrack[0])
+     newTopTrack = updateSongList[0]
+      updateSongList[0] = updateSongList[track];
+      i = 1
     }
-    else if (side === "Evening"){
-      let newTopTrack = updateSongList.splice(track, 1)
-      updateSongList.unshift(newTopTrack[43])
+    else {
+     track += 43
+      newTopTrack = updateSongList[43];
+      updateSongList[43]=updateSongList[track];
+      i = 44
+    }
+
+    while (i <= track){
+      let nextTrack = updateSongList[i]
+      updateSongList[i] = newTopTrack
+      newTopTrack = nextTrack
+      i++
     }
     this.setState({
       songData: updateSongList
@@ -41,7 +53,7 @@ class App extends Component {
           <h1 className="page-header--title">Radio Lovelace</h1>
         </header>
         <main className="main">
-          <RadioSet tracks={this.state.songData} moveToTopCallback={this.onChangeTrack} />
+          <RadioSet tracks={songData} moveToTopCallback={this.onChangeTrack} />
         </main>
       </div>
     );
