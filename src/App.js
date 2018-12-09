@@ -15,37 +15,50 @@ class App extends Component {
     super()
     console.log(this.state)
     this.state={
-      songData
+      // songData
+      Morning: songData.slice(0, songData.length / 2),
+      Evening: songData.slice(songData.length/2, songData.length)
     }
   }
 
+  onSwitchList = (track, side) =>{
+    let updateSongList = this.state;
+    const trk = updateSongList[side][track];
+
+    if (side === 'Morning') {
+      updateSongList.Evening.unshift(trk)
+      updateSongList.Morning.splice(track, 1)
+    } else {
+      updateSongList.Morning.unshift(trk)
+      updateSongList.Evening.splice(track, 1)
+    }
+
+    this.setState({updateSongList})
+
+  };
+
   onChangeTrack = (track,side) => {
-    let updateSongList = this.state.songData;
-    let newTopTrack = " ";
-    let i = " ";
+    let updateSongList = [...this.state[side]];
 
-    if (side === "Morning"){
-     newTopTrack = updateSongList[0]
-      updateSongList[0] = updateSongList[track];
-      i = 1
-    }
-    else {
-     track += 43
-      newTopTrack = updateSongList[43];
-      updateSongList[43]=updateSongList[track];
-      i = 44
-    }
+    let currentTrack = updateSongList[0];
+    updateSongList[0] = updateSongList[track];
+    let i = 1;
 
-    while (i <= track){
-      let nextTrack = updateSongList[i]
-      updateSongList[i] = newTopTrack
-      newTopTrack = nextTrack
+    while(i <= track){
+      let nextTrack = updateSongList[i];
+      updateSongList[i] = currentTrack
+      currentTrack = nextTrack;
       i++
     }
-    this.setState({
-      songData: updateSongList
-    })
-  };
+
+    if (side === 'Morning') {
+      this.setState({Morning: updateSongList})
+    } else {
+      this.setState({Evening: updateSongList})
+    }
+     console.log(this.state);
+  }
+
   render() {
     return (
       <div className="App">
@@ -53,7 +66,7 @@ class App extends Component {
           <h1 className="page-header--title">Radio Lovelace</h1>
         </header>
         <main className="main">
-          <RadioSet tracks={songData} moveToTopCallback={this.onChangeTrack} />
+          <RadioSet tracks={this.state} moveToTopCallback={this.onChangeTrack} switchListCallback={this.onSwitchList}/>
         </main>
       </div>
     );

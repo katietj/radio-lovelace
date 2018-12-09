@@ -38,6 +38,7 @@ const Playlist = (props) => {
         side={props.side}
         index={i}
         moveToTopCallback={props.moveToTopCallback}
+        switchListCallback={props.switchListCallback}
         {...track}
       />
     );
